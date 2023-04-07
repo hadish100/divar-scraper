@@ -1,11 +1,20 @@
 const puppeteer = require("puppeteer");
 const fs = require("fs").promises;
 const fs2 = require("fs");
-
-var conv = {'۱':'1','۲':'2','۳':'3','۴':'4','۵':'5','۶':'6','۷':'7','۸':'8','۹':'9','۰':'0'}
+var conv = {'۱':'1','۲':'2','۳':'3','۴':'4','۵':'5','۶':'6','۷':'7','۸':'8','۹':'9','۰':'0'};
 var links = [];
 var page,browser;
-var cookie_files = ["./cookies1.json","./cookies2.json","./cookies3.json","./cookies4.json","./cookies5.json","./cookies6.json","./cookies7.json"];var cookie_iterator = 0;
+var cookies_arr = [];
+
+function gri(min,max) 
+{
+   min = Math.ceil(min);
+   max = Math.floor(max);
+   return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+
+fs2.readdir("./cookies/",(err,files) => {cookies_arr = files;
 
 fs2.readFile("list.txt",{encoding: 'utf-8'},function(err,data)
 {
@@ -15,7 +24,6 @@ links = data.split("\n");
 (async () => {
 
 	browser = await puppeteer.launch({headless:true});
-
 for(var i=0;i<links.length;i++)
 {
 
@@ -23,7 +31,7 @@ for(var i=0;i<links.length;i++)
 	{
 		page = await browser.newPage();
 		await page.setDefaultTimeout(20000);
-		const cookiesString = await fs.readFile(cookie_files[cookie_iterator%7]);
+		const cookiesString = await fs.readFile("cookies/"+cookies_arr[gri(0,cookies_arr.length-1)]);
 		const cookies = JSON.parse(cookiesString);
 		await page.setCookie(...cookies);
 
@@ -49,8 +57,7 @@ for(var i=0;i<links.length;i++)
 
 	catch(err) 
 	{ 
-	console.log("BACKING OFF !");
-	cookie_iterator++;
+	console.log("BACKING OFF !" + err);
 	page.close();
 	await browser.close();
 	browser = await puppeteer.launch({headless:true});
@@ -61,3 +68,7 @@ for(var i=0;i<links.length;i++)
  await browser.close();
 
 })();
+
+
+
+});
