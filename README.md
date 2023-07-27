@@ -32,5 +32,5 @@
   <h4>خروجی نمونه :</h4>
   
 <p align="center">
-<img src="https://github.com/hadish100/divar-scraper/blob/main/images/pic.png">
+<img src="https://github.com/hadish100/divar-scraper/blob/main/images/pic2.png">
 </p>
